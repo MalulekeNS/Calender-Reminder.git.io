@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Calendar Reminder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid red;
+    }
+
+    .heading-section {
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #2a2a2a;
+      padding: 20px;
+      border-right: 2px solid red;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .sidebar ul li:hover {
+      color: red;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calendar-container {
+      flex-grow: 1;
+      background-color: #1a1a1a;
+      border: 1px solid red;
+      padding: 20px;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .calendar-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid red;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .calendar-item h4 {
+      margin: 0 0 10px;
+    }
+
+    .calendar-item p {
+      margin: 0;
+    }
+
+    .delete-button {
+      background-color: red;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      background-color: #ff4d4d;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="heading-section">Dashboard</h2>
+  </header>
+  <div class="container">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="Dashboard.html" style="color: white; text-decoration: none;">Dashboard</a></li>
+        <li><a href="index.html" style="color: white; text-decoration: none;">Calendar</a></li>
+        <li><a href="events.html" style="color: white; text-decoration: none;">Events</a></li>
+        <li><a href="settings.html" style="color: white; text-decoration: none;">Settings</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <div class="calendar-container">
+        <!-- Calendar will be loaded here by JavaScript -->
+      </div>
+    </main>
+  </div>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Load events from localStorage and display them in the calendar
+    function loadCalendar() {
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+      const calendarContainer = document.querySelector('.calendar-container');
+      calendarContainer.innerHTML = ''; // Clear previous content
+
+      events.forEach((event, index) => {
+        const eventHTML = `<div class="calendar-item">
+                            <div>
+                              <h4>${event.name}</h4>
+                              <p>${event.count} people</p>
+                              <p>${event.date}</p>
+                            </div>
+                            <button class="delete-button" data-index="${index}">Delete</button>
+                          </div>`;
+        calendarContainer.innerHTML += eventHTML;
+      });
+
+      // Add event listeners to delete buttons
+      const deleteButtons = document.querySelectorAll('.delete-button');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const eventIndex = this.getAttribute('data-index');
+          deleteEvent(eventIndex);
+        });
+      });
+    }
+
+    // Delete event function
+    function deleteEvent(index) {
+      let events = JSON.parse(localStorage.getItem('events')) || [];
+      events.splice(index, 1);
+      localStorage.setItem('events', JSON.stringify(events));
+      loadCalendar(); // Reload calendar after deletion
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCalendar);
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Settings</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid red;
+      color: white;
+    }
+
+    .heading-section {
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #2a2a2a;
+      padding: 20px;
+      border-right: 2px solid red;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .sidebar ul li:hover {
+      color: red;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .settings-container {
+      background-color: #1a1a1a;
+      border: 1px solid red;
+      padding: 20px;
+      flex-grow: 1;
+      color: white;
+    }
+
+    .settings-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid red;
+    }
+
+    .settings-item label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .settings-item input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #2a2a2a;
+      border: 1px solid red;
+      color: white;
+    }
+
+    .settings-item button {
+      padding: 10px 20px;
+      background-color: red;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .settings-item button:hover {
+      background-color: #ff4d4d;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="heading-section">Settings</h2>
+  </header>
+  <div class="container">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="Dashboard.html" style="color: white; text-decoration: none;">Dashboard</a></li>
+        <li><a href="index.html" style="color: white; text-decoration: none;">Calendar</a></li>
+        <li><a href="add_event.html" style="color: white; text-decoration: none;">Events</a></li>
+        <li><a href="settings.html" style="color: white; text-decoration: none;">Settings</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <div class="settings-container">
+        <div class="settings-item">
+          <label for="username">Username:</label>
+          <input type="text" id="username" placeholder="Enter your username">
+        </div>
+        <div class="settings-item">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        <div class="settings-item">
+          <label for="password">Password:</label>
+          <input type="password" id="password" placeholder="Enter new password">
+        </div>
+        <div class="settings-item">
+          <label for="theme">Theme Color:</label>
+          <select id="theme">
+            <option value="black-red">Black & Red</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <button id="save-settings">Save Settings</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Save settings to localStorage
+    document.getElementById('save-settings').addEventListener('click', function() {
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const theme = document.getElementById('theme').value;
+
+      const settings = {
+        username: username,
+        email: email,
+        password: password,
+        theme: theme
+      };
+
+      localStorage.setItem('settings', JSON.stringify(settings));
+      alert('Settings saved!');
+    });
+
+    // Load settings from localStorage
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('settings'));
+
+      if (settings) {
+        document.getElementById('username').value = settings.username || '';
+        document.getElementById('email').value = settings.email || '';
+        document.getElementById('password').value = settings.password || '';
+        document.getElementById('theme').value = settings.theme || 'black-red';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSettings);
+  </script>
+</body>
+</html>
