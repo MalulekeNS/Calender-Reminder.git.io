@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px red;
+            text-align: center;
+        }
+        .form-container h2 {
+            color: red;
+            margin-top: 0;
+        }
+        .form-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-container button:hover {
+            background-color: darkred;
+        }
+        .register-link {
+            color: white;
+            margin-top: 15px;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .register-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <!-- Modified form structure with name attributes -->
+        <form id="loginForm">
+            <input type="text" name="username" id="username" placeholder="Username" required>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <a href="register.html" class="register-link">Register</a>
+    </div>
+
+   <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Collect form data
+        var formData = new FormData(this);
+
+        // Make the POST request to the login.php script
+        fetch('login.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok'); // Handle non-2xx responses
+            }
+            return response.json(); // Parse JSON response
+        })
+        .then(data => {
+            if (data.success) {
+                // Show pop-up message with the username
+                alert('Hello, ' + data.username + '! Welcome back.');
+
+                // Redirect the user to their profile page after 2 seconds
+                setTimeout(function() {
+                    window.location.href = 'index.html'; // Redirect to the profile page
+                }, 2000);
+            } else {
+                // Show error message
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    });
+</script>
+
+
+</body>
+</html>

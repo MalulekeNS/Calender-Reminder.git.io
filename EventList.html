@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Events List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid red;
+      color: white;
+    }
+    .heading-section {
+      color: white;
+    }
+    .container {
+      display: flex;
+      flex-grow: 1;
+    }
+    /* Sidebar Styles */
+.sidebar {
+  width: 10%; /* Sidebar width for larger screens */
+  background-color: #2a2a2a;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed; /* Fixed position for sidebar on the left */
+  top: 0;
+  left: 0;
+  height: 100vh; /* Full height of the screen */
+  z-index: 100; /* Ensures sidebar is above other content */
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 10px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.sidebar ul li a:hover {
+  background-color: #444; /* Darker background on hover */
+  color: red; /* Red text color on hover */
+  padding-left: 10px; /* Adds padding to the left for hover effect */
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  /* Make sidebar full width for small screens and toggleable */
+  .sidebar {
+    width: 100%; /* Takes up full width on mobile */
+    height: auto;
+    position: relative; /* Sidebar will no longer be fixed */
+    display: none; /* Initially hidden */
+  }
+
+  /* Show sidebar when toggled */
+  .sidebar.open {
+    display: block;
+  }
+
+  /* Add a background overlay when the sidebar is open */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+  }
+
+  /* Styling for the sidebar links */
+  .sidebar ul li a {
+    font-size: 16px; /* Smaller font size for mobile */
+    padding: 15px;
+  }
+}
+
+/* Hamburger Menu Button for Mobile */
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: white;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+/* Show hamburger on mobile */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
+  }
+}
+
+
+.sidebar ul li:hover {
+  color: red !important;
+}
+
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .events-container {
+      flex-grow: 1;
+      background-color: #1a1a1a;
+      border: 1px solid red;
+      padding: 20px;
+      margin-bottom: 20px;
+      margin-left:5%;
+      color: white;
+    }
+    .event-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid red;
+    }
+    .event-item h4 {
+      margin: 0 0 10px;
+      color: red;
+    }
+    .event-item p {
+      margin: 0;
+      color: white;
+    }
+    #user-profile {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+    }
+    #user-profile a {
+      color: red;
+      text-decoration: none;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="heading-section">Events List</h2>
+    <div id="user-profile"></div>
+  </header>
+
+  <div class="container">
+      <aside class="sidebar">
+  <ul>
+    <li><a href="Dashboard.html">Dashboard</a></li>
+    <li><a href="index.html">Calendar</a></li>
+    <li><a href="EventList.html">List of Events</a></li>
+    <li><a href="settings.html">Settings</a></li>
+  </ul>
+</aside>
+<div class="hamburger">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+    <main class="main-content">
+      <div class="events-container">
+        <!-- Events will be loaded here by JavaScript -->
+      </div>
+    </main>
+  </div>
+
+ <script>
+  // Toggle the sidebar on mobile
+const hamburger = document.querySelector('.hamburger');
+const sidebar = document.querySelector('.sidebar');
+const overlay = document.createElement('div'); // Create overlay for mobile
+
+// When clicking the hamburger, toggle the sidebar
+hamburger.addEventListener('click', function () {
+  sidebar.classList.toggle('open'); // Toggle sidebar visibility
+  if (sidebar.classList.contains('open')) {
+    // Show the overlay when the sidebar is open
+    document.body.appendChild(overlay);
+  } else {
+    // Remove overlay when the sidebar is closed
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+  }
+});
+
+// Close sidebar when clicking the overlay
+overlay.addEventListener('click', function () {
+  sidebar.classList.remove('open');
+  overlay.parentNode.removeChild(overlay);
+});
+  // Display logged-in user
+  async function displayUserProfile() {
+    try {
+      const response = await fetch('https://staffmanagementsystem.co.za/get_user_data.php'); // Adjust path as needed
+      const user = await response.json();
+      const userProfileDiv = document.getElementById('user-profile');
+
+      if (user.username && user.username !== '') { // Check if username is defined and not empty
+        userProfileDiv.innerHTML = `${user.username} | <a href="#" id="logout">Logout</a>`;
+        
+        // Add logout functionality
+        document.getElementById('logout').addEventListener('click', function() {
+          window.location.href = 'logout.php'; // Redirect to a PHP logout script
+        });
+        
+        return true; // User is logged in
+      } else {
+        userProfileDiv.innerHTML = `<a href="login.html">Login</a>`;
+        return false; // User is not logged in
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+      return false;
+    }
+  }
+
+  // Load events from the database and display them if user is logged in
+  async function loadEvents() {
+    const eventsContainer = document.querySelector('.events-container');
+    eventsContainer.innerHTML = ''; // Clear existing content
+
+    try {
+      const response = await fetch('https://staffmanagementsystem.co.za/events.php'); // Adjust path as needed
+      const events = await response.json();
+
+      events.forEach(event => {
+        eventsContainer.innerHTML += `
+          <div class="event-item">
+            <h4>${event.name}</h4>
+            <p>${event.count} people</p>
+            <p>${event.date}</p>
+          </div>`;
+      });
+    } catch (error) {
+      console.error('Error loading events:', error);
+    }
+  }
+
+  // Load the profile and events when the page loads
+  document.addEventListener('DOMContentLoaded', async () => {
+    const isLoggedIn = await displayUserProfile();
+    
+    // Load events only if the user is logged in
+    if (isLoggedIn) {
+      loadEvents();
+    } else {
+      document.querySelector('.events-container').innerHTML = `<p>Please log in to view events.</p>`;
+    }
+  });
+</script>
+
+</body>
+</html>
